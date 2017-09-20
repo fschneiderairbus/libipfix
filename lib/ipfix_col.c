@@ -2021,7 +2021,7 @@ int ipfix_get_template_ident( ipfix_template_t *t,
  */
 void ipfix_col_cleanup( void )
 {
-    ipfixe_node_t *e;
+    ipfixe_node_t *e, *next;
 
     while( udp_sources ) {
         _delete_ipfix_source( &udp_sources, udp_sources );
@@ -2035,12 +2035,15 @@ void ipfix_col_cleanup( void )
 
     mpoll_timerrm( g_mt );
 
-    /** todo: free nodes
+    /** clean-up nodes
      */
-    for ( e=g_exporter; e!=NULL; e=e->next ) {
+    for ( e=g_exporter; e!=NULL; e=next ) {
         if ( e->elem->export_cleanup )
             (void) e->elem->export_cleanup( e->elem->data );
+		next = e->next;
+		free(e);
     }
+	g_exporter = NULL;
 }
 
 /* name:        ipfix_listen()
