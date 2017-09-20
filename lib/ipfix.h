@@ -17,6 +17,7 @@ extern "C" {
 #endif
 
 #include <inttypes.h>
+#include <stdlib.h>
 #include <ipfix_def.h>
 #include <sys/socket.h>
 
